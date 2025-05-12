@@ -1,0 +1,115 @@
+% [2]: Seite 11
+\chapter{Aufgabenstellung}
+
+In diesem Kapitel findest du die vollständige Aufgabenstellung im originalen Wortlaut.
+
+\section{Ausgangslage}
+
+Die Renuo AG ist eine Software-Agentur, die sich auf die Entwicklung von Webanwendungen mit Ruby on Rails spezialisiert hat. Bei der Renuo AG nutzen wir eine Software namens \textbf{Redmine} zur Projektverwaltung. Redmine bietet auch Funktionen zur Verwaltung von Issues (Aufgaben oder Fehlerberichte), allerdings gestaltet sich die Suche nach bestimmten Issues oft schwierig, wenn man nicht genau weiss, wonach man suchen sollte.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/redmine.png}
+    \caption{Redmine Logo}
+    \label{fig:redmine}
+\end{figure}
+
+Da Redmine eine Open-Source-Software ist, ist der Source-Code öffentlich verfügbar. Das ermöglicht es nicht nur, die Funktionsweise von Redmine nachzuvollziehen, sondern auch, die Funktionalität durch eigene oder bereits existierende Plugins zu erweitern.
+
+Einige der Funktionen, die Redmine \textquotedblleft out-of-the-box\textquotedblright\ mitbringt, reichen für die Anforderungen der Renuo nicht immer aus. Ein Beispiel dafür ist die Suche nach Issues.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/redmine-search.png}
+    \caption{Screenshot der Redmine Suchfunktion}
+    \label{fig:redmine-search}
+\end{figure}
+
+Dieses Problem soll im Rahmen dieser IPA-Arbeit gelöst werden.
+
+\section{Detaillierte Aufgabenstellung}
+
+Das Ziel dieses Projekts ist es, die grundsätzliche Machbarkeit eines Ansatzes zur Verbesserung der Suche zu untersuchen. Dafür werden Informationen zu folgenden Punkten benötigt:
+
+\begin{itemize}
+    \item Qualität der neuen Suchergebnisse
+    \item Performance der Suche
+    \item Kosten
+\end{itemize}
+
+Die Software richtet sich an folgende Benutzerrollen:
+
+\begin{itemize}
+    \item \textbf{Admin:} Konfiguriert und verwaltet die Redmine-Installation und hat Zugriff auf einen Admin-Account.
+    \item \textbf{User:} Sucht nach Tickets mit ähnlichen Inhalten und hat Zugriff auf einen normalen User-Account.
+    \item Die Unterscheidung der Rollen erfolgt über das bestehende Rollensystem von Redmine (Admin-Flag in der Datenbank).
+\end{itemize}
+
+\subsection{Abkürzungen / Begriffe}
+
+\begin{itemize}
+    \item \textbf{Source-Code:} Der Quellcode eines Projekts
+    \item \textbf{Embedding:} Ein Vektor, der einen Text oder einen Satz repräsentiert.
+    \item \textbf{AI:} Artificial Intelligence, Künstliche Intelligenz
+    \item \textbf{OpenAI:} Die Firma hinter \url{https://openai.com/}
+    \item \textbf{OpenAI-API:} Schnittstellen von OpenAI \url{https://openai.com/api/}
+    \item \textbf{ERB:} Embedded Ruby. Templating Engine für Ruby (\url{https://rubyapi.org/o/erb})
+    \item \textbf{Slim:} Template Engine für Ruby (\url{https://slim-template.github.io/})
+    \item \textbf{CI:} Continuous Integration
+    \item \textbf{SaaS:} Software-as-a-Service
+\end{itemize}
+
+\subsection{Folgende User-Stories sollen umgesetzt werden:}
+
+\begin{itemize}
+    \item \textbf{F1:} Als Admin kann ich das AI-Search-Redmine-Plugin herunterladen und installieren. Die Anweisungen im README des GitHub-Repositories reichen für die Installation aus. Das Plugin ist nach der Installation nicht automatisch aktiviert.
+    \item \textbf{F2:} Als Admin kann ich die für das Plugin benötigten Zugangsdaten als Umgebungsvariablen hinterlegen (OpenAI-API-Key).
+    \item \textbf{F3:} Als User kann ich nach Tickets suchen, wobei die Ergebnisse wie bei der bestehenden Suche angezeigt werden. Es ist vom Lernenden selbst zu entscheiden, welche Ticket-Felder, Kommentare und Zeiteintrag-Kommentare in das Embedding einfliessen. Dabei sollen die Relevanz der Felder für die Suchergebnisse, die Häufigkeit der Regenerierung der Embeddings bei Datenänderungen und der Entwicklungsaufwand berücksichtigt werden. Ebenso ist zu bestimmen, welches AI-Modell von OpenAI verwendet wird. Dabei sollen Eignung, Kosten und Performance evaluiert werden. Es genügt, sich auf die Empfehlungen und Dokumentation von OpenAI zu stützen; ein direkter Vergleich im Betrieb ist nicht erforderlich.
+    \item \textbf{F4:} Die Suche steht nur Usern mit einer entsprechenden Entwickler- oder Managerrolle zur Verfügung.
+    \item \textbf{F5:} Die Suchergebnisse dürfen nur Tickets enthalten, auf die der User auch tatsächlich Zugriff hat.
+\end{itemize}
+
+Es gelten folgende nicht-funktionalen Anforderungen:
+
+\begin{itemize}
+    \item \textbf{Software-Design:} Das Plugin muss so weit wie möglich von Redmine entkoppelt sein. Beispielsweise sollen bestehende Redmine-Tabellen nicht verändert werden (stattdessen Join-Tabellen verwenden).
+    \item \textbf{Software-Design:} Das Plugin soll sich an die Coding-Guidelines von Redmine halten und bereits vorhandene Bibliotheken nutzen (z.B. Minitest, ERB statt Slim).
+    \item \textbf{Software-Design:} Die Generierung der Embeddings soll im Hintergrund erfolgen.
+    \item \textbf{Software-Design:} Die Anbindung der OpenAI-API soll so gestaltet sein, dass ein Wechsel des AI-Modells einfach möglich ist – insbesondere mit Blick darauf, später ein lokales AI-Modell einsetzen zu können.
+    \item \textbf{Maintainability:} Das Plugin soll die Vanilla-Redmine-Versionen 5.1.x und 6.0.x unterstützen. Die speziell angepasste Redmine-Variante von Renuo muss nicht berücksichtigt werden.
+    \item \textbf{Dokumentation:} Die Funktionsweise des Plugins muss im README des Projekts kurz beschrieben werden.
+    \item \textbf{Tests:} Der Happy Path muss durch automatisierte End-to-End-Tests (System-Tests) abgedeckt sein.
+    \item \textbf{Tests:} Die Unit-Test-Abdeckung des Plugins beträgt 100\%.
+    \item \textbf{Tests:} Zugriffe auf die OpenAI-API müssen in den automatisierten Tests gemockt werden.
+\end{itemize}
+
+\subsection{Testumgebung}
+
+Für die automatisierten Tests soll GitHub Actions mit Ubuntu 24.04 verwendet werden. Postgres wird dabei als Service eingebunden. Getestet wird mit Redmine 5.1 und 6.0. Die System-Tests werden mit der auf GitHub Actions verfügbaren Chrome-Version im "Headless"-Modus durchgeführt (siehe \url{https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md}).
+
+Für manuelle Tests und Demonstrationen wird das MacBook des Kandidaten verwendet, das nach dem \textquotedblleft Renuo Laptop Setup Guide\textquotedblright\ eingerichtet ist.
+
+\section{Mittel und Methoden}
+
+Für die IPA werden folgende Technologien eingesetzt:
+
+\begin{itemize}
+    \item Redmine 5.1 und 6.0 (Plugin-Kompatibilität)
+    \item Ruby on Rails 6.1 und 7.2 (Plugin-Kompatibilität)
+    \item Ruby (3.2.8, da kompatibel mit Redmine 5.1 und 6.0)
+    \item MiniTest (5.25.5 oder neuer)
+    \item Rubocop (Version, die Redmine 6.0 verwendet: 1.68.0)
+    \item HTML5 (HTML, JS, CSS)
+    \item PostgreSQL (Version 16)
+    \item pgvector (v0.8.0)
+    \item GitHub / GitHub Actions (SaaS)
+    \item OpenAI API (SaaS)
+\end{itemize}
+
+Wo relevant, wird die Software in englischer Sprache verwendet.
+
+Die zu entwickelnde Software läuft auf dem MacBook des Kandidaten mit einer aktuellen Chrome-Version (Version 134 oder neuer). Das Laptop ist gemäss dem \textquotedblleft Renuo Laptop Setup Guide\textquotedblright\ eingerichtet.
+
+Die Wahl der Software zur Dokumentation ist dem Kandidaten überlassen. In der Vergangenheit hat sich LaTeX mit \url{https://github.com/swissictedu/ipa-template} als Basis bewährt.
+
+%\lipsum[10] % This line was commented out or removed in the previous step
