@@ -1,6 +1,6 @@
 name: 'Continuous delivery'
 
-on: 
+on:
   push:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
       - name: Run Tectonic and Biber
         run: tectonic -X build
       - name: Upload pdf
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Document
           path: build/default/default.pdf
